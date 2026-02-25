@@ -4,16 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Цифровой Полигон | Итоговый проект</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;700;900&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     <style>
         /* === ПЕРЕМЕННЫЕ И БАЗОВЫЕ НАСТРОЙКИ === */
         :root {
-            --bg-color: #0d0f12;
-            --text-main: #e0e5ec;
+            --bg-dark: #0d0f12;
+            --text-main: #e2e8f0; /* Приглушенный белый для долгого чтения */
             --neon-cyan: #00ffcc;
             --neon-purple: #b829ea;
-            --glass-bg: rgba(255, 255, 255, 0.03);
-            --glass-border: rgba(255, 255, 255, 0.1);
+            --glass-bg: rgba(20, 25, 30, 0.6);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --transition-speed: 0.4s;
         }
 
         * {
@@ -22,461 +22,453 @@
             box-sizing: border-box;
         }
 
+        html { scroll-behavior: smooth; }
+
         body {
-            background-color: var(--bg-color);
+            background-color: var(--bg-dark);
             color: var(--text-main);
-            font-family: 'Roboto', sans-serif;
-            overflow-x: hidden;
+            /* УЛУЧШЕННАЯ ТИПОГРАФИКА ДЛЯ ЛОНГРИДА */
+            font-family: 'Segoe UI', Roboto, Montserrat, sans-serif;
+            font-size: 1.1rem;
             line-height: 1.6;
+            overflow-x: hidden;
             background-image: 
-                radial-gradient(circle at 15% 50%, rgba(0, 255, 204, 0.05) 0%, transparent 50%),
-                radial-gradient(circle at 85% 30%, rgba(184, 41, 234, 0.05) 0%, transparent 50%);
+                radial-gradient(circle at 10% 20%, rgba(0, 255, 204, 0.03) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(184, 41, 234, 0.04) 0%, transparent 40%);
             background-attachment: fixed;
         }
 
+        /* Абзацы отделяются отступом для вдумчивого чтения */
+        p { margin-bottom: 1.5rem; text-align: justify; }
+        
+        /* Градиентные заголовки */
         h1, h2, h3, h4 {
-            font-family: 'Montserrat', sans-serif;
+            line-height: 1.3;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
         }
 
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: var(--bg-color); }
-        ::-webkit-scrollbar-thumb { background: var(--neon-purple); border-radius: 4px; }
-
-        /* Утилиты для анимации скролла */
-        .fade-in {
-            opacity: 0;
-            transform: translateY(40px);
-            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
-        }
-        .fade-in.visible {
-            opacity: 1;
-            transform: translateY(0);
+        .neon-text {
+            background: linear-gradient(90deg, var(--neon-cyan), var(--neon-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            color: transparent;
+            display: inline-block;
         }
 
-        /* === БЛОК 1: HERO SECTION === */
-        .hero {
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 0 20px;
-            position: relative;
-        }
+        .accent-cyan { color: var(--neon-cyan); text-shadow: 0 0 10px rgba(0,255,204,0.3); }
+        .accent-purple { color: var(--neon-purple); text-shadow: 0 0 10px rgba(184,41,234,0.3); }
 
-        .hero h1 {
-            font-size: clamp(3rem, 8vw, 6rem);
-            font-weight: 900;
-            color: #fff;
-            text-transform: uppercase;
-            letter-spacing: 5px;
-            text-shadow: 0 0 10px var(--neon-cyan), 0 0 20px var(--neon-cyan), 0 0 40px rgba(0,255,204,0.5);
-            margin-bottom: 20px;
-        }
+        ul { margin-left: 2rem; margin-bottom: 1.5rem; }
+        li { margin-bottom: 0.8rem; }
 
-        .hero p {
-            max-width: 800px;
-            font-size: clamp(1rem, 2vw, 1.2rem);
-            color: #aaa;
-            margin-bottom: 40px;
-        }
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: var(--bg-dark); }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, var(--neon-cyan), var(--neon-purple)); border-radius: 5px; }
 
         .btn {
             display: inline-block;
-            padding: 15px 40px;
-            font-size: 1.1rem;
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 700;
-            color: var(--bg-color);
+            padding: 12px 30px;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--bg-dark);
             background: var(--neon-cyan);
             border: none;
-            border-radius: 30px;
-            cursor: pointer;
-            text-decoration: none;
-            box-shadow: 0 0 15px var(--neon-cyan);
-            transition: all 0.3s ease;
-        }
-
-        .btn:hover {
-            background: #fff;
-            box-shadow: 0 0 25px #fff;
-            transform: scale(1.05);
-        }
-
-        /* === ОБЩИЕ СТИЛИ СЕКЦИЙ === */
-        section {
-            padding: 100px 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .section-title {
-            font-size: 2.5rem;
-            color: var(--neon-purple);
-            text-align: center;
-            margin-bottom: 50px;
-            text-shadow: 0 0 10px rgba(184, 41, 234, 0.5);
-            text-transform: uppercase;
-        }
-        .section-title span { color: var(--neon-cyan); text-shadow: 0 0 10px rgba(0, 255, 204, 0.5); }
-
-        /* === БЛОК 2: LEVEL 1 (ТЕОРИЯ - КАРТОЧКИ) === */
-        .cards-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-        }
-
-        .card {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: 15px;
-            padding: 30px;
-            backdrop-filter: blur(10px);
-            transition: transform 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease;
-        }
-
-        .card:hover {
-            transform: translateY(-10px);
-            border-color: var(--neon-cyan);
-            box-shadow: 0 10px 30px rgba(0, 255, 204, 0.15);
-        }
-
-        .card-icon {
-            font-size: 3rem;
-            margin-bottom: 15px;
-        }
-
-        .card h3 {
-            font-size: 1.3rem;
-            color: #fff;
-            margin-bottom: 10px;
-        }
-
-        .card p {
-            color: #bbb;
-            font-size: 0.95rem;
-        }
-
-        /* === БЛОК 3: ПОЛЗУНОК "СВОБОДА VS ПОРЯДОК" === */
-        .slider-container {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            padding: 50px 30px;
-            text-align: center;
-        }
-
-        input[type=range] {
-            -webkit-appearance: none;
-            width: 100%;
-            max-width: 600px;
-            background: transparent;
-            margin: 30px 0;
-        }
-
-        input[type=range]:focus { outline: none; }
-
-        input[type=range]::-webkit-slider-runnable-track {
-            width: 100%;
-            height: 8px;
-            cursor: pointer;
-            background: linear-gradient(90deg, #ff4c4c, var(--neon-purple), var(--neon-cyan));
-            border-radius: 4px;
-        }
-
-        input[type=range]::-webkit-slider-thumb {
-            height: 24px;
-            width: 24px;
-            border-radius: 50%;
-            background: #fff;
-            cursor: pointer;
-            -webkit-appearance: none;
-            margin-top: -8px;
-            box-shadow: 0 0 15px #fff;
-            transition: transform 0.1s;
-        }
-
-        input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.3); }
-
-        .server-display {
-            min-height: 250px;
-            margin-top: 30px;
-            padding: 30px;
-            border-radius: 15px;
-            background: rgba(0,0,0,0.4);
-            border-left: 5px solid var(--neon-cyan);
-            transition: all 0.3s ease;
-        }
-
-        .server-display h3 {
-            font-size: 2rem;
-            margin-bottom: 15px;
-            color: #fff;
-        }
-
-        .server-display p { color: #ccc; font-size: 1.1rem; }
-        .server-display .badge {
-            display: inline-block;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: bold;
-            text-transform: uppercase;
-            margin-bottom: 15px;
-        }
-
-        /* === БЛОК 4: КВИЗ === */
-        .quiz-container {
-            background: var(--glass-bg);
-            border: 1px solid var(--neon-purple);
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 0 20px rgba(184, 41, 234, 0.1);
-        }
-
-        .question { margin-bottom: 30px; }
-        .question h4 { font-size: 1.2rem; color: #fff; margin-bottom: 15px; }
-
-        .option {
-            display: block;
-            position: relative;
-            padding: 15px 15px 15px 45px;
-            margin-bottom: 10px;
-            cursor: pointer;
-            background: rgba(255,255,255,0.05);
             border-radius: 8px;
-            transition: background 0.3s;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all var(--transition-speed);
+            box-shadow: 0 0 15px rgba(0,255,204,0.4);
         }
-        
-        .option:hover { background: rgba(255,255,255,0.1); }
-        .option input { position: absolute; opacity: 0; cursor: pointer; }
-        .checkmark {
-            position: absolute;
-            top: 50%;
-            left: 15px;
-            transform: translateY(-50%);
-            height: 20px;
-            width: 20px;
-            background-color: transparent;
-            border: 2px solid var(--neon-purple);
-            border-radius: 50%;
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 25px rgba(0,255,204,0.8);
+            background: #fff;
         }
-        .option input:checked ~ .checkmark { background-color: var(--neon-purple); box-shadow: 0 0 10px var(--neon-purple); }
-
-        #quiz-result {
-            display: none;
-            margin-top: 30px;
-            padding: 30px;
-            background: rgba(0, 255, 204, 0.1);
+        .btn-outline {
+            background: transparent;
+            color: var(--neon-cyan);
             border: 1px solid var(--neon-cyan);
-            border-radius: 15px;
-            text-align: center;
+            box-shadow: none;
         }
-        #quiz-result h3 { color: var(--neon-cyan); margin-bottom: 10px; font-size: 1.8rem;}
+        .btn-outline:hover { background: rgba(0,255,204,0.1); color: #fff;}
 
-        /* === БЛОК 5: ДОРОЖНАЯ КАРТА (TIMELINE) === */
-        .timeline {
-            position: relative;
-            max-width: 800px;
-            margin: 0 auto;
+        /* Утилита плавного появления всего сайта */
+        .fade-in-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
         }
-        .timeline::after {
-            content: '';
-            position: absolute;
-            width: 4px;
-            background-color: var(--glass-border);
-            top: 0;
-            bottom: 0;
-            left: 20px;
-            margin-left: -2px;
-        }
+        .fade-in-scroll.visible { opacity: 1; transform: translateY(0); }
 
-        .tl-item {
-            padding: 10px 40px;
-            position: relative;
-            background-color: inherit;
-            width: 100%;
-            margin-bottom: 30px;
-        }
+        /* Вёрстка секций */
+        section { max-width: 1000px; margin: 0 auto; padding: 100px 20px; border-bottom: 1px solid var(--glass-border); }
+        .section-header { font-size: 2.5rem; text-align: center; margin-bottom: 3rem; text-transform: uppercase; }
 
-        .tl-item::after {
-            content: '';
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            right: auto;
-            background-color: var(--bg-color);
-            border: 4px solid var(--neon-cyan);
-            top: 15px;
-            left: 10px;
-            border-radius: 50%;
-            z-index: 1;
-            box-shadow: 0 0 10px var(--neon-cyan);
-        }
+        /* === БЛОК: HERO & ВВЕДЕНИЕ === */
+        header { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; max-width: 1000px; margin: 0 auto; padding: 40px 20px;}
+        header h1 { font-size: clamp(3rem, 6vw, 5rem); text-transform: uppercase; text-shadow: 0 0 20px rgba(0,255,204,0.5); letter-spacing: 2px;}
+        .intro-box { background: var(--glass-bg); border-left: 4px solid var(--neon-purple); padding: 30px; border-radius: 0 12px 12px 0; margin-bottom: 30px; backdrop-filter: blur(10px); }
+        .intro-box p:last-child { margin-bottom: 0; }
 
-        .tl-content {
-            padding: 20px;
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: 15px;
-        }
-        .tl-content h4 { color: white; font-size: 1.2rem; margin-bottom: 10px; }
-        .tl-content p { color: #bbb; font-size: 0.95rem;}
+        /* === БЛОК 1: ТЕОРИЯ (СЕТКА + КНОПКИ) === */
+        .cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 30px; }
+        .card { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 12px; padding: 40px; display: flex; flex-direction: column; transition: transform var(--transition-speed); }
+        .card:hover { transform: translateY(-5px); border-color: rgba(184, 41, 234, 0.4); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .card h3 { font-size: 1.6rem; color: #fff; margin-bottom: 15px; border-bottom: 1px solid var(--glass-border); padding-bottom: 10px;}
+        .card p { flex-grow: 1; color: #a0aec0; font-size: 1rem; }
+        .card .btn-outline { margin-top: 20px; text-align: center; width: 100%;}
 
-        /* === FOOTER === */
-        footer {
-            background: #050608;
-            padding: 50px 20px;
-            text-align: center;
-            border-top: 1px solid var(--glass-border);
+        /* === МОДАЛЬНЫЕ ОКНА (POPUPS) === */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(8px);
+            display: flex; justify-content: center; align-items: center;
+            opacity: 0; visibility: hidden; transition: all 0.4s ease; z-index: 1000;
         }
-        footer p { color: #888; max-width: 800px; margin: 0 auto 20px auto; }
-        footer .credits { color: var(--neon-cyan); font-weight: bold; }
+        .modal-overlay.active { opacity: 1; visibility: visible; }
+        .modal-content {
+            background: var(--bg-dark); border: 1px solid var(--neon-purple);
+            border-radius: 12px; max-width: 800px; width: 90%;
+            max-height: 80vh; overflow-y: auto; padding: 40px; position: relative;
+            transform: scale(0.9); transition: transform 0.4s ease;
+            box-shadow: 0 0 50px rgba(184, 41, 234, 0.2);
+        }
+        .modal-overlay.active .modal-content { transform: scale(1); }
+        .modal-close {
+            position: absolute; top: 20px; right: 25px; font-size: 2rem;
+            color: var(--text-main); cursor: pointer; line-height: 1;
+            transition: color 0.3s;
+        }
+        .modal-close:hover { color: var(--neon-cyan); }
+        .modal-content p { font-size: 1.15rem; }
 
-        @media screen and (max-width: 768px) {
-            .timeline::after { left: 15px; }
-            .tl-item { padding-left: 45px; padding-right: 0;}
-            .tl-item::after { left: 5px; }
+        /* === БЛОК 2: СЛАЙДЕР СЕРВЕРОВ (МЕГА-ТЕКСТ ПОД НИМ) === */
+        #server-slider-container { width: 100%; margin: 40px 0; }
+        input[type=range] {
+            -webkit-appearance: none; width: 100%; background: transparent; height: 40px; margin-bottom: 20px;
+        }
+        input[type=range]:focus { outline: none; }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%; height: 6px; cursor: pointer;
+            background: linear-gradient(90deg, #333, var(--neon-purple), var(--neon-cyan));
+            border-radius: 4px; border: 1px solid rgba(255,255,255,0.1);
+        }
+        input[type=range]::-webkit-slider-thumb {
+            height: 30px; width: 30px; border-radius: 50%;
+            background: #fff; cursor: pointer; -webkit-appearance: none;
+            margin-top: -12px; box-shadow: 0 0 20px #fff;
+            border: 3px solid var(--neon-purple); transition: transform 0.2s;
+        }
+        input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.2); }
+        
+        .slider-labels { display: flex; justify-content: space-between; font-size: 0.8rem; color: #718096; text-transform: uppercase; font-weight: bold;}
+        
+        /* Блок динамического текста под слайдером */
+        #server-dynamic-text {
+            background: rgba(20, 25, 30, 0.5); border: 1px solid var(--glass-border);
+            padding: 50px; border-radius: 12px; margin-top: 30px;
+            transition: opacity 0.5s ease-in-out; opacity: 1;
+            min-height: 400px; position: relative;
+            box-shadow: inset 0 0 30px rgba(0,0,0,0.5);
+        }
+        #server-dynamic-text.fade-out { opacity: 0; }
+        #s-title { font-size: 2.2rem; margin-bottom: 5px; }
+        #s-badge { display: inline-block; padding: 6px 15px; border-radius: 4px; font-weight: bold; font-size: 0.85rem; letter-spacing: 1px; margin-bottom: 30px; }
+        #s-content h4 { color: #fff; font-size: 1.3rem; margin-top: 30px; margin-bottom: 15px; }
+        .server-conclusion { background: rgba(0, 255, 204, 0.05); border-left: 3px solid var(--neon-cyan); padding: 20px; margin-top: 30px; font-style: italic;}
+
+        /* === БЛОК 3: ЛАБОРАТОРИЯ РОЛЕЙ (ТЕСТ) === */
+        #quiz { background: rgba(184, 41, 234, 0.03); border: 1px solid rgba(184, 41, 234, 0.2); border-radius: 12px; padding: 40px; margin: 40px 0;}
+        .q-row { margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .q-row h4 { font-size: 1.2rem; color: #fff; margin-bottom: 20px; font-weight: 500;}
+        .q-labels label { display: block; margin-bottom: 12px; cursor: pointer; padding: 10px 15px; background: rgba(0,0,0,0.3); border-radius: 6px; transition: background 0.2s;}
+        .q-labels label:hover { background: rgba(255,255,255,0.05); }
+        #quiz-result { display: none; margin-top: 30px; background: rgba(0,255,204,0.1); padding: 30px; border-left: 4px solid var(--neon-cyan);}
+
+        /* === БЛОК 4: ДОРОЖНАЯ КАРТА (ACCORDIONS) === */
+        .accordion-container { margin-top: 50px; }
+        .acc-item { margin-bottom: 20px; background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 8px; overflow: hidden; }
+        .acc-header {
+            padding: 25px 30px; cursor: pointer; display: flex; justify-content: space-between; align-items: center;
+            background: rgba(0,0,0,0.2); transition: background 0.3s;
+        }
+        .acc-header:hover { background: rgba(0,0,0,0.5); }
+        .acc-header h3 { margin: 0; font-size: 1.3rem; color: #fff; transition: color 0.3s; }
+        .acc-header.active h3 { color: var(--neon-cyan); }
+        .acc-icon { font-size: 1.5rem; color: var(--neon-purple); transition: transform 0.3s; }
+        .acc-header.active .acc-icon { transform: rotate(45deg); color: var(--neon-cyan); }
+        .acc-content {
+            max-height: 0; overflow: hidden; transition: max-height 0.5s cubic-bezier(0, 1, 0, 1);
+            background: transparent;
+        }
+        .acc-content-inner { padding: 30px; border-top: 1px solid rgba(255,255,255,0.05); }
+
+        /* === ФУТЕР === */
+        footer { padding: 80px 20px; background: #050608; border-top: 1px solid rgba(255,255,255,0.1); text-align: center; }
+        .footer-content { max-width: 1000px; margin: 0 auto; text-align: left;}
+
+        /* Адаптив */
+        @media (max-width: 768px) {
+            .cards-grid { grid-template-columns: 1fr; }
+            section { padding: 70px 20px; }
+            #server-dynamic-text { padding: 30px 20px; }
+            .acc-header { padding: 20px; }
         }
     </style>
 </head>
 <body>
 
-    <!-- БЛОК 1: HERO SECTION -->
-    <header class="hero">
-        <h1 class="fade-in">Цифровой полигон</h1>
-        <p class="fade-in">Принципы виртуальной самоорганизации для реального мира. Почему в играх люди соблюдают правила охотнее, чем в жизни? Изучаем феномен «игрового права» (Lex Ludorum) для модернизации школьного самоуправления.</p>
-        <a href="#level1" class="btn fade-in" onclick="smoothScroll(event, 'level1')">Начать погружение</a>
+    <!-- ВВЕДЕНИЕ / HERO -->
+    <header>
+        <p class="accent-purple" style="letter-spacing: 3px; font-weight: bold; margin-bottom: 10px;">ИССЛЕДОВАТЕЛЬСКАЯ РАБОТА • 10 КЛАСС</p>
+        <h1 class="neon-text">Цифровой полигон</h1>
+        <h2 style="font-size: 1.5rem; font-weight: 300; font-family: sans-serif; margin-bottom: 40px; color: #a0aec0;">Принципы виртуальной самоорганизации для реального мира.</h2>
+        
+        <div class="intro-box fade-in-scroll">
+            <h3 style="color: #fff;">Обоснование актуальности темы</h3>
+            <p>Для меня лично: Современное поколение выросло в сети. Мы общаемся, учимся и работаем над проектами на цифровых платформах. Я активно увлекаюсь изучением многопользовательских миров (Minecraft, EVE Online). Меня поражает факт: в интернете, где царит анонимность и нет реальной полиции, миллионы пользователей самостоятельно создают работающие законы, честные суды и сложные экономические модели.</p>
+            <p><strong>Проблема:</strong> Существует большой разрыв между тем, как управляются официальные молодежные организации (вертикальный контроль, боязнь наказания), и тем, как гибко самоорганизуются сообщества в интернете (горизонтальный контроль, дорожение репутацией). Потенциал «игрового права» (Lex Ludorum) часто недооценивается.</p>
+        </div>
+
+        <div class="intro-box fade-in-scroll" style="border-left-color: var(--neon-cyan);">
+            <h3 style="color: #fff;">Гипотеза исследования</h3>
+            <p>Если принципы виртуальной самоорганизации (децентрализованная модерация, соучастное создание правил самими подростками и репутационная система мотивации) интегрировать в структуру реального школьного самоуправления, это приведет к росту инициативности учеников и снижению нарушений дисциплины.</p>
+        </div>
+        
+        <div style="margin-top: 30px;">
+            <a href="#theory" class="btn">Начать погружение</a>
+        </div>
     </header>
 
-    <!-- БЛОК 2: ТЕОРИЯ (ХЕЙЗИНГА, КАСТРОНОВА, ЛЕССИГ) -->
-    <section id="level1" class="fade-in">
-        <h2 class="section-title">Level 1: <span>Теоретический фундамент</span></h2>
-        <div class="cards-grid">
+    <!-- БЛОК 1: ТЕОРИЯ С МОДАЛЬНЫМИ ОКНАМИ -->
+    <section id="theory">
+        <h2 class="section-header neon-text">Глава 1. Теоретический фундамент</h2>
+        <p style="text-align: center; margin-bottom: 50px; font-size: 1.2rem; max-width: 800px; margin-left: auto; margin-right: auto;">
+            Чтобы понять, как подростки и взрослые создают законы в интернете, необходимо обратиться к теории культурологии и социологии.
+        </p>
+
+        <div class="cards-grid fade-in-scroll">
+            <!-- Карточка 1 -->
             <div class="card">
-                <div class="card-icon">🌀</div>
-                <h3>Магический круг</h3>
-                <p><strong>Йохан Хейзинга</strong> ввёл понятие пространства, внутри которого действуют особые правила. Заходя на сервер, человек добровольно принимает набор ограничений. Если кто-то их нарушает (читы) — разрушается сама суть. Без законов игра теряет смысл.</p>
+                <h3>🎮 Магический круг (Й. Хейзинга)</h3>
+                <p>Почему миллионы людей добровольно подчиняются строгим правилам в пространствах, которые считаются «просто играми»? Нидерландский философ объяснил этот социально-культурный феномен.</p>
+                <button class="btn btn-outline" onclick="openModal('modal-1')">Изучить теорию</button>
             </div>
+            <!-- Карточка 2 -->
             <div class="card">
-                <div class="card-icon">🏛️</div>
-                <h3>Синтетические государства</h3>
-                <p><strong>Эдвард Кастронова</strong> доказал: где накапливается виртуальное богатство и ресурсы, там возникает сложная экономика. Чтобы защитить свои многочасовые труды, люди неизбежно создают виртуальное право, институты и полицию.</p>
+                <h3>🏛️ Цифровые государства (Э. Кастронова)</h3>
+                <p>Крупные многопользовательские игры перестали быть просто развлечением, трансформировавшись в экономически сложные «синтетические миры» со своим ВВП.</p>
+                <button class="btn btn-outline" onclick="openModal('modal-2')">Изучить теорию</button>
             </div>
+            <!-- Карточка 3 -->
             <div class="card">
-                <div class="card-icon">💻</div>
-                <h3>Код как закон (Code is Law)</h3>
-                <p><strong>Лоуренс Лессиг</strong> утверждал: социальные законы нужны лишь там, где программный код дает свободу выбора. Если сундук нельзя запереть плагином, игроки вынуждены создавать патрули и суды. Свобода ошибки порождает ответственность.</p>
+                <h3>💻 Код как закон (Л. Лессиг)</h3>
+                <p>Фундаментальное правило цифровой среды ("Code is Law"). Социальные законы и нормы рождаются исключительно там, где программный код дает человеку свободу на совершение ошибки.</p>
+                <button class="btn btn-outline" onclick="openModal('modal-3')">Изучить теорию</button>
+            </div>
+            <!-- Карточка 4 -->
+            <div class="card">
+                <h3>🧠 Психология игроков (Р. Бартл)</h3>
+                <p>Британский ученый разделил цифровое общество на 4 категории. Доказательство того, почему деструктивные элементы общества стимулируют созидателей создавать законы.</p>
+                <button class="btn btn-outline" onclick="openModal('modal-4')">Изучить теорию</button>
             </div>
         </div>
     </section>
 
-    <!-- БЛОК 3: ПОЛЗУНОК CEРВЕРОВ -->
-    <section id="level2" class="fade-in">
-        <h2 class="section-title">Level 2: <span>Свобода vs Порядок</span></h2>
-        <div class="slider-container">
-            <p style="color: #aaa; margin-bottom: 10px;">Двигай ползунок, чтобы увидеть эволюцию виртуального общества: от полного хаоса до тотального контроля.</p>
-            
-            <input type="range" min="1" max="5" value="1" id="serverSlider">
-            
-            <div class="server-display" id="serverDisplay">
-                <!-- Контент генерируется через JS -->
+    <!-- === СКРЫТЫЙ HTML ДЛЯ МОДАЛЬНЫХ ОКОН БЛОКА 1 === -->
+    <div id="modal-1" class="modal-overlay" onclick="closeModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <span class="modal-close" onclick="closeModal(event)">✖</span>
+            <h2 class="neon-text">Феномен игры как основы социального строительства</h2>
+            <p>Ответ на вопрос, почему люди подчиняются правилам в игре, дал нидерландский философ <strong>Йохан Хейзинга</strong> в своей знаменитой книге «Homo Ludens» («Человек играющий»).</p>
+            <p>Хейзинга ввел понятие <strong>«Магического круга»</strong> (Magic Circle). Это временное или постоянное пространство, внутри которого действуют особые, отличные от обыденной жизни правила. </p>
+            <p>Заходя в этот круг (будь то футбольное поле или сервер Minecraft), человек добровольно принимает набор ограничений. Внутри игры эти правила священны. Если кто-то их нарушает (например, использует чит-коды), он разрушает саму суть процесса. Поэтому виртуальные сообщества крайне серьезно относятся к своим внутренним законам — без них игра просто теряет смысл.</p>
+        </div>
+    </div>
+
+    <div id="modal-2" class="modal-overlay" onclick="closeModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <span class="modal-close" onclick="closeModal(event)">✖</span>
+            <h2 class="neon-text">Виртуальные миры как цифровые государства</h2>
+            <p>Профессор экономики <strong>Эдвард Кастронова</strong> в книге «Миры по соседству» доказал, что крупные многопользовательские игры давно перестали быть просто развлечением. Они трансформировались в полноценные <strong>«синтетические миры» — цифровые государства</strong>.</p>
+            <p>Кастронова обнаружил, что экономика этих миров реальна. Люди тратят сотни часов на добычу ресурсов, строительство и торговлю. В таких играх возникает разделение труда: появляются не только воины, но и строители, логисты, торговцы и даже дипломаты.</p>
+            <p>Там, где есть сложная экономика и накапливается ценность (виртуальное богатство), неизбежно возникает необходимость это богатство защищать. Так рождается инфраструктура, виртуальное право и полномасштабная внутриигровая политика.</p>
+        </div>
+    </div>
+
+    <div id="modal-3" class="modal-overlay" onclick="closeModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <span class="modal-close" onclick="closeModal(event)">✖</span>
+            <h2 class="neon-text">Концепция «Код как закон» (Code is Law)</h2>
+            <p>Профессор права Гарвардского университета <strong>Лоуренс Лессиг</strong> сформулировал фундаментальное правило: "Code is Law".</p>
+            <p>В реальном мире нас ограничивают законы физики и уголовный кодекс. В виртуальном мире главная власть принадлежит разработчику, написавшему программный код. Если код позволяет игрокам открывать чужие сундуки и забирать вещи — значит, кража физически возможна. Чтобы её остановить, сообщество вынуждено придумывать социальные правила и формировать дружины для патрулирования.</p>
+            <p>Если же код игры блокирует сундуки от посторонних (например, через жесткий плагин привата территорий), то проблема решается на чисто техническом уровне, и <strong>социальный закон больше становится не нужен</strong>.</p>
+            <p>Эта теория крайне важна для проекта: она доказывает, что люди развиваются и создают социальные институты только там, где им дается свобода выбора и возможность совершать ошибки.</p>
+        </div>
+    </div>
+
+    <div id="modal-4" class="modal-overlay" onclick="closeModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <span class="modal-close" onclick="closeModal(event)">✖</span>
+            <h2 class="neon-text">Психология игроков и причины создания законов</h2>
+            <p>Британский профессор <strong>Ричард Бартл</strong> создал знаменитую «Типологию игроков», разделив общество виртуальных миров на четыре взаимозависимые категории:</p>
+            <ul>
+                <li><strong>Накопители (Achievers)</strong>: стремятся к богатству и выполнению сложных задач. Им нужен порядок.</li>
+                <li><strong>Исследователи (Explorers)</strong>: изучают мир, ищут баги и тестируют границы реальности на прочность.</li>
+                <li><strong>Социализаторы (Socializers)</strong>: составляют абсолютное большинство. Для них главное — общение, дружба и социальный договор.</li>
+                <li><strong>Разрушители / Гриферы (Killers)</strong>: небольшая, но агрессивная группа (около 1%), получающая удовольствие от разрушения чужих трудов и психологического доминирования.</li>
+            </ul>
+            <p>Потрясающий вывод Бартла заключается в том, что именно наличие «Разрушителей» является главным катализатором самоорганизации общества! Чтобы защитить свои многомесячные труды от вандалов, созидающее большинство вынуждено объединяться, писать законы, создавать общие черные списки судебные системы. Порядок исторически рождается из необходимости защиты.</p>
+        </div>
+    </div>
+
+    <!-- БЛОК 2: ИНТЕРАКТИВНЫЙ ПОЛЗУНОК -->
+    <section id="servers">
+        <h2 class="section-header neon-text">Глава 2. Лаборатории порядка</h2>
+        <p style="text-align: center; max-width: 800px; margin: 0 auto 40px auto; font-size: 1.2rem;">
+            Опираясь на теорию, мы проанализировали реальные примеры самоорганизации сотен тысяч людей на конкретных серверах. Изменяя уровень программных запретов (код среды), мы видим, как трансформируется общество.<br><span class="accent-cyan">↓ Потяните ползунок, чтобы изучить кейсы ↓</span>
+        </p>
+
+        <div id="server-slider-container" class="fade-in-scroll">
+            <input type="range" id="server-range" min="0" max="4" value="0">
+            <div class="slider-labels">
+                <span>Абсолютная свобода (Анархия)</span>
+                <span></span>
+                <span>Ролевой тоталитаризм (Порядок)</span>
+            </div>
+
+            <!-- БЛОК ДЛЯ ИНЬЕКЦИИ ТЕКСТА (JS) -->
+            <div id="server-dynamic-text">
+                <!-- Содержимое генерируется с помощью JavaScript -->
             </div>
         </div>
     </section>
 
-    <!-- БЛОК 4: КВИЗ ПО БАРТЛУ -->
-    <section id="level3" class="fade-in">
-        <h2 class="section-title">Level 3: <span>Твоя роль по Бартлу</span></h2>
-        <p style="text-align: center; color: #aaa; margin-bottom: 40px;">Психология объясняет, почему мы создаем законы. Созидающее большинство вынуждено объединяться, чтобы защититься от хулиганов. А кем в школьном/виртуальном коллективе являешься ты?</p>
+    <!-- БЛОК 3: ЛАБОРАТОРИЯ ТВОЕЙ РОЛИ (ТЕСТ) -->
+    <section id="roles" class="fade-in-scroll">
+        <h2 class="section-header neon-text">Архетипы: Узнай свою роль по Бартлу</h2>
+        <p style="text-align: center; margin-bottom: 40px;">Прежде чем внедрять законы в классе, важно понять структуру своего коллектива. Пройди мини-тест на определение ролевой модели.</p>
         
-        <div class="quiz-container" id="quizContainer">
-            <div class="question">
-                <h4>1. Что для тебя самое главное в коллективном проекте?</h4>
-                <label class="option"><input type="radio" name="q1" value="achiever"> <span class="checkmark"></span> Выполнить все задачи идеально и получить высшую оценку.</label>
-                <label class="option"><input type="radio" name="q1" value="explorer"> <span class="checkmark"></span> Найти нестандартные решения и изучить все возможности.</label>
-                <label class="option"><input type="radio" name="q1" value="socializer"> <span class="checkmark"></span> Сплотить команду, общаться и просто классно провести время вместе.</label>
-                <label class="option"><input type="radio" name="q1" value="killer"> <span class="checkmark"></span> Стать неформальным лидером и доказать своё превосходство над другими группами.</label>
-            </div>
-
-            <div class="question">
-                <h4>2. Если кто-то из команды нарушает установленные правила, ты...</h4>
-                <label class="option"><input type="radio" name="q2" value="achiever"> <span class="checkmark"></span> Требую исключить его, ведь он тормозит общий прогресс.</label>
-                <label class="option"><input type="radio" name="q2" value="explorer"> <span class="checkmark"></span> Наблюдаю, к каким последствиям для системы это приведет.</label>
-                <label class="option"><input type="radio" name="q2" value="socializer"> <span class="checkmark"></span> Пытаюсь поговорить с ним, чтобы погасить конфликт миром.</label>
-                <label class="option"><input type="radio" name="q2" value="killer"> <span class="checkmark"></span> Использую его ошибку, чтобы публично высмеять и наказать.</label>
-            </div>
-
-            <div class="question">
-                <h4>3. Идеальный школьный парламент (актив) — это...</h4>
-                <label class="option"><input type="radio" name="q3" value="achiever"> <span class="checkmark"></span> Четкая структура, где каждый получает баллы и рейтинг за работу.</label>
-                <label class="option"><input type="radio" name="q3" value="explorer"> <span class="checkmark"></span> Лаборатория, где можно тестировать смелые форматы мероприятий.</label>
-                <label class="option"><input type="radio" name="q3" value="socializer"> <span class="checkmark"></span> Дружная тусовка, где все друг друга поддерживают.</label>
-                <label class="option"><input type="radio" name="q3" value="killer"> <span class="checkmark"></span> Серьезный орган власти, диктующий свои правила всей школе.</label>
-            </div>
-
-            <button class="btn" onclick="checkQuiz()" style="width: 100%; margin-top: 20px;">Узнать результат</button>
-        </div>
-
-        <div id="quiz-result">
-            <h3 id="res-title"></h3>
-            <p id="res-text" style="color: #fff;"></p>
-            <button class="btn" style="margin-top: 20px; font-size: 0.9rem; padding: 10px 20px;" onclick="resetQuiz()">Пройти заново</button>
-        </div>
-    </section>
-
-    <!-- БЛОК 5: ДОРОЖНАЯ КАРТА ДЛЯ ШКОЛ (TIMELINE) -->
-    <section id="level4" class="fade-in">
-        <h2 class="section-title">Roadmap: <span>Перенос в реальность</span></h2>
-        <p style="text-align: center; color: #aaa; margin-bottom: 50px; max-width: 800px; margin-left: auto; margin-right: auto;">Классические молодежные институты испытывают дефицит мотивации из-за вертикального управления («сверху вниз»). Как внедрить механики цифровых миров в школьное самоуправление?</p>
-        
-        <div class="timeline">
-            <div class="tl-item">
-                <div class="tl-content">
-                    <h4>🛠️ 1. Соучастное нормотворчество (Опыт Reddit и CivMC)</h4>
-                    <p>Вместо готового устава от куратора, актив проводит "Конституционную сессию". Школьники с чистого листа сами пишут правила своей группы. Законы, созданные "снизу", нарушаются на 80% реже, так как включается ответственность за собственный труд.</p>
+        <div id="quiz">
+            <div class="q-row">
+                <h4>1. Что для тебя самое главное, если класс поручил тебе организовать мероприятие?</h4>
+                <div class="q-labels">
+                    <label><input type="radio" name="q1" value="achiever"> Провести его идеально, чтобы получить высший бал и грамоту.</label>
+                    <label><input type="radio" name="q1" value="socializer"> Сплотить команду подготовки, чтобы все перезнакомились и смеялись.</label>
+                    <label><input type="radio" name="q1" value="explorer"> Найти совершенно новый, экспериментальный формат (например, квест-комната).</label>
+                    <label><input type="radio" name="q1" value="killer"> Стать неформальным лидером, отдав строгие приказы, чтобы доказать свой авторитет.</label>
                 </div>
             </div>
-            <div class="tl-item">
-                <div class="tl-content">
-                    <h4>⚖️ 2. Горизонтальная модерация (Опыт Discord)</h4>
-                    <p>Отказ от надзора учителей во внеурочном общении. Контроль передается сменяемым ученикам-«модераторам». Если порядок поддерживает одноклассник, это воспринимается как честный социальный договор равных, а не приказ начальства.</p>
+            <div class="q-row">
+                <h4>2. Если во время проектной работы кто-то из одноклассников откровенно халтурит и ломает процесс, ты:</h4>
+                <div class="q-labels">
+                    <label><input type="radio" name="q2" value="killer"> Изолирирую его, занесу в "черный список" и публично накажу.</label>
+                    <label><input type="radio" name="q2" value="achiever"> Попрошу куратора исключить его из группы: он тормозит сроки сдачи проекта.</label>
+                    <label><input type="radio" name="q2" value="socializer"> Устрою личный разговор, чтобы понять причину конфликта, и попробую договориться.</label>
+                    <label><input type="radio" name="q2" value="explorer"> Понаблюдаю, как система коллективной безопасности справится с этой аномалией.</label>
                 </div>
             </div>
-            <div class="tl-item">
-                <div class="tl-content">
-                    <h4>⭐ 3. Индекс Цифрового Доверия (Опыт Hermitcraft)</h4>
-                    <p>Замена карательной психологии страха на репутационную мотивацию. Внедрение "Кармы" за инициативу. Ошибка ведет не к нотациям, а к временной потере очков. Высокий рейтинг открывает реальные привилегии (права на организацию, оборудование).</p>
-                </div>
-            </div>
-            <div class="tl-item">
-                <div class="tl-content">
-                    <h4>🛡️ 4. Фильтр "Вайтлиста" (Опыт GTA Role Play)</h4>
-                    <p>Участие в активе не должно быть принудительным. Легкий входной барьер (собеседование или испытательный срок) превращает членство в статусную привилегию. Подростки дорожат доступом к элитному комьюнити и боятся потерять статус.</p>
-                </div>
+            <button class="btn" style="width: 100%; font-size: 1.1rem; padding: 15px;" onclick="calculateQuiz()">Анализировать мою роль</button>
+            
+            <div id="quiz-result">
+                <h3 id="res-title" class="accent-cyan"></h3>
+                <p id="res-desc"></p>
+                <div class="server-conclusion">Этот тип поведения важен для баланса школьного самоуправления. Без конфликтов не бывает роста институтов.</div>
             </div>
         </div>
     </section>
 
-    <!-- БЛОК 6: FOOTER -->
+    <!-- БЛОК 4: ДОРОЖНАЯ КАРТА ДЛЯ ШКОЛ (ACCORDIONS) -->
+    <section id="roadmap">
+        <h2 class="section-header neon-text">Глава 3. Дорожная карта для школ</h2>
+        <div class="intro-box fade-in-scroll">
+            <p><strong>Практическая реализация:</strong> Главной задачей проекта было не только изучить феномен цифрового общества, но и найти пути адаптации этого опыта для модернизации структур реального молодежного парламента и советов обучающихся. Ниже предложены 4 рабочих принципа, которые любой актив может перенять у метавселенных.</p>
+        </div>
+
+        <div class="accordion-container fade-in-scroll">
+            
+            <!-- Accordion 1 -->
+            <div class="acc-item">
+                <div class="acc-header" onclick="toggleAccordion(0)">
+                    <h3>🎓 Принцип 1. Соучастное нормотворчество (Опыт CivMC и Reddit)</h3>
+                    <div class="acc-icon">+</div>
+                </div>
+                <div class="acc-content">
+                    <div class="acc-content-inner">
+                        <p>В существующей практике в начале учебного года куратор (учитель) зачитывает готовый устав школьного актива. Обучающиеся воспринимают его как формальность и «закон сверху». Из-за этого уровень нарушения дисциплины и отсутствие мотивации остаются высокими.</p>
+                        <p><strong>Цифровой подход:</strong> Активу нужно провести "Конституционную сессию". Школьники должны с чистого листа, на пустом ватмане, сами выписать и проголосовать за список правил своей группы. </p>
+                        <p>Психология и опыт серверов вроде CivMC доказывают: законы, созданные коллективом "снизу", нарушаются на 80% реже, так как включается мощное чувство ответственности за собственный социальный труд.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Accordion 2 -->
+            <div class="acc-item">
+                <div class="acc-header" onclick="toggleAccordion(1)">
+                    <h3>⚖️ Принцип 2. Горизонтальная модерация (Опыт Discord)</h3>
+                    <div class="acc-icon">+</div>
+                </div>
+                <div class="acc-content">
+                    <div class="acc-content-inner">
+                        <p>Строгая вертикаль «Преподаватель – Ученик» во внеурочной деятельности часто вызывает внутренний протест у подростков.</p>
+                        <p>В чатах платформы Discord миллионы пользователей общаются без вмешательства создателей платформы. Власть отдана самим участникам: они назначают из своей среды "модераторов".</p>
+                        <p><strong>Внедрение в школу:</strong> Контроль за чатами класса или рабочей дисциплиной во время подготовки мероприятий должен быть делегирован самим ученикам, сменяемым (ротируемым) модераторам из числа детей. Когда порядок поддерживает одноклассник, это воспринимается как честный договор равных, а не как унизительный приказ начальства.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Accordion 3 -->
+            <div class="acc-item">
+                <div class="acc-header" onclick="toggleAccordion(2)">
+                    <h3>⭐ Принцип 3. Индекс Цифрового Доверия (Практика Кармы и Hermitcraft)</h3>
+                    <div class="acc-icon">+</div>
+                </div>
+                <div class="acc-content">
+                    <div class="acc-content-inner">
+                        <p>В традиционной школьной среде часто господствует карательная психология: система строится на страхе перед выговором, нотациями или вызовом родителей. В виртуальном мире наказания администратора работают плохо из-за анонимности.</p>
+                        <p>Вместо этого сервера внедрили систему Открытой Репутации («Карму»). На сервере Hermitcraft люди не воруют, потому что больше всего боятся потерять "Лицо" (Status) перед участниками закрытого клуба.</p>
+                        <p><strong>Проектное решение:</strong> Создайте открытый "Рейтинг инициативы" для парламентаников. За взятую ответственность карма плюсуется (Upvote). Ошибка ведет к временному обнулению множителя, а не к унизительным нотациям. Важное условие: высокий рейтинг должен открывать ученикам реальные, осязаемые права: возможность самому выбрать формат радиопередачи, право распоряжаться оборудованием гимназии или вести официальные соцсети.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Accordion 4 -->
+            <div class="acc-item">
+                <div class="acc-header" onclick="toggleAccordion(3)">
+                    <h3>🛡️ Принцип 4. Фильтр "Вайтлиста" и Престижный статус (Опыт GTA Role Play)</h3>
+                    <div class="acc-icon">+</div>
+                </div>
+                <div class="acc-content">
+                    <div class="acc-content-inner">
+                        <p>Участие в школьном самоуправлении часто превращается в принудительную "обязаловку" («Сходил послушать для галочки, чтобы классная руководительница отстала»).</p>
+                        <p>Вершина виртуального взаимодействия — ролевые RP серверы NoPixel. Чтобы туда попасть, игроки сдают экзамены на знание кодексов и часами сидят в очереди. Место там — предмет гордости.</p>
+                        <p><strong>Школьная механика:</strong> Доступ в главный ученический актив не должен быть безусловным. Внедрение небольшого, но торжественного собеседования перед вступлением (интервью с действующими членами парламента) и «испытательный срок» психологически меняют отношение подростка. Преодолев препятствие, он начинает ценить своё членство как элитное достижение, которое он боится потерять.</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ЗАКЛЮЧЕНИЕ / ФУТЕР -->
     <footer>
-        <h2 style="color: #fff; margin-bottom: 20px; font-family: 'Montserrat';">Итог исследования</h2>
-        <p>Парадоксальный опыт анархо-серверов доказывает: общество, оказавшись в условиях абсолютной свободы, не самоуничтожается. Ради созидания люди добровольно объединяются и пишут кодексы чести.</p>
-        <p>Если дать молодым людям защищенную площадку, доверие и прозрачную систему "Кармы", они способны самостоятельно выстроить эффективно работающее общество в реальной школе.</p>
-        <p class="credits">Проект подготовил: ученик 10 класса • 2026 год</p>
+        <div class="footer-content fade-in-scroll">
+            <h2 class="neon-text" style="font-size: 2.2rem; margin-bottom: 20px;">Заключение исследования</h2>
+            <p style="color: #a0aec0; text-align: left;">Выдвинутая во введении гипотеза полностью подтвердилась. Опыт цифровых метавселенных показывает, что интеграция механизмов <strong>прозрачной репутации, горизонтальной модерации и соучастного нормотворчества</strong> значительно повышает инициативность молодежи.</p>
+            <p style="color: #a0aec0; text-align: left;">Глубокий анализ виртуальных миров приводит к очень оптимистичному выводу: человеческая природа (даже в среде глубокой сетевой анонимности) неизменно стремится к созиданию, порядку и справедливости. Если дать молодым людям защищенную площадку, оказать доверие и передать в руки современные инструменты "цифрового" самоуправления, они способны организовать в школьных и студенческих стенах надежно работающее гражданское общество.</p>
+            
+            <div style="border-top: 1px solid var(--glass-border); margin-top: 50px; padding-top: 30px; text-align: center;">
+                <p class="accent-purple" style="font-weight: 700; text-transform: uppercase;">Цифровой полигон • Выполнил ученик 10 класса • 2026</p>
+            </div>
+        </div>
     </footer>
+
 
     <!-- СВЯЗУЮЩИЙ JAVASCRIPT -->
     <script>
-        // 1. Плавный скролл
-        function smoothScroll(event, targetId) {
-            event.preventDefault();
-            document.getElementById(targetId).scrollIntoView({ behavior: 'smooth' });
-        }
-
-        // 2. Анимация появления элементов при скролле (Intersection Observer)
+        // Анимация при скролле (fade-in)
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if(entry.isIntersecting) {
@@ -484,116 +476,181 @@
                 }
             });
         }, { threshold: 0.1 });
+        document.querySelectorAll('.fade-in-scroll').forEach(el => observer.observe(el));
 
-        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
-
-        // 3. Логика ползунка серверов
-        const serverData = {
-            1: {
-                title: "2b2t: Анархия и Спонтанный порядок",
-                badge: "АБСОЛЮТНАЯ СВОБОДА",
-                color: "#ff4c4c",
-                text: "Старейший анархо-сервер Minecraft. Нет администрации, нет правил. На спавне царит хаос, но вдали от него игроки создают тайные ложи с жесткой дисциплиной, прокладывают магистрали и объединяются против внешних угроз. Вывод: Порядок инстинктивно рождается даже из хаоса ради созидания."
-            },
-            2: {
-                title: "Hermitcraft: Экономика абсолютного доверия",
-                badge: "ЭКОНОМИКА ЧЕСТИ",
-                color: "#ffca28",
-                text: "Закрытый частный сервер для избранных творцов. Нет программной защиты (приватов) сундуков. Любой может взять товар из магазина, просто оставив алмазы. Краж нет принципиально. Вывод: В закрытом обществе страх потери репутации работает надежнее полиции."
-            },
-            3: {
-                title: "CivMC: Институты и Тюрьмы",
-                badge: "ПОЛИТИЧЕСКИЙ СИМУЛЯТОР",
-                color: "#00ffcc",
-                text: "Игрокам дан программный инструмент «Жемчужина Тюрьмы», позволяющий лишать свободы других персонажей. Это вынудило общество повзрослеть: появились государства, банки, публичные суды присяжных в Discord и конституции. Правосудие вершат сами игроки."
-            },
-            4: {
-                title: "EVE Online: Демократия в космосе",
-                badge: "КОРПОРАТИВНЫЙ РЕАЛИЗМ",
-                color: "#4facfe",
-                text: "Суровая космическая экономика с легитимным «Советом Звездного Управления» (CSM). Десятки тысяч игроков демократично выбирают депутатов. Разработчики оплачивают им перелет в Исландию для обсуждения законов игры. Вывод: Виртуальная демократия имеет реальную силу."
-            },
-            5: {
-                title: "NoPixel (GTA RP): Ролевой контроль",
-                badge: "ТОТАЛЬНЫЙ КОНТРОЛЬ",
-                color: "#b829ea",
-                text: "Сервер с жестким отбором (Вайтлист). Каждый отыгрывает роль (судья, медик, коп). Полицейский обязан зачитывать права. Суды длятся часами, а тюрьма наносит урон прогрессу. Вывод: Люди педантично соблюдают законы, потому что невероятно дорожат статусом резидента престижного сообщества."
+        // МОДАЛЬНЫЕ ОКНА
+        function openModal(id) {
+            document.getElementById(id).classList.add('active');
+            document.body.style.overflow = 'hidden'; // Блокировка скролла страницы
+        }
+        function closeModal(event) {
+            if (event.target.classList.contains('modal-overlay') || event.target.classList.contains('modal-close')) {
+                const modals = document.querySelectorAll('.modal-overlay');
+                modals.forEach(m => m.classList.remove('active'));
+                document.body.style.overflow = 'auto'; // Возврат скролла
             }
-        };
-
-        const slider = document.getElementById('serverSlider');
-        const display = document.getElementById('serverDisplay');
-
-        function updateSliderInfo() {
-            const data = serverData[slider.value];
-            display.style.borderLeftColor = data.color;
-            display.style.opacity = 0;
-            
-            setTimeout(() => {
-                display.innerHTML = `
-                    <div class="badge" style="background: ${data.color}22; color: ${data.color}; border: 1px solid ${data.color}">
-                        ${data.badge}
-                    </div>
-                    <h3>${data.title}</h3>
-                    <p>${data.text}</p>
-                `;
-                display.style.opacity = 1;
-            }, 150);
         }
 
-        slider.addEventListener('input', updateSliderInfo);
-        updateSliderInfo(); // Инициализация первого сервера
-
-        // 4. Логика Квиза по Ричарду Бартлу
-        const resultsData = {
-            achiever: {
-                title: "🏆 Накопитель (Achiever)",
-                text: "Ты стремишься к результату, статусу и выполнению сложных задач. В школьном парламенте ты — двигатель прогресса, который доводит дела до конца. Тебе нужны четкие правила и порядок, чтобы никто не мешал работе."
+        // БОЛЬШИЕ ДАННЫЕ ДЛЯ СЛАЙДЕРА (ИЗ ПРОЕКТА - ГЛАВА 2)
+        const serverData =[
+            {
+                badge: "АБСОЛЮТНАЯ АНАРХИЯ",
+                badgeColor: "rgba(255, 76, 76, 0.2)",
+                badgeTextColor: "#ff4c4c",
+                idTheme: "#ff4c4c",
+                title: "2b2t: Анархия и спонтанный порядок",
+                htmlContent: `
+                    <h4>Окружение без законов</h4>
+                    <p>Сервер 2b2t — старейший анархо-сервер в мире. Согласно его правилам, здесь нет никаких запретов на разрушение, обман или использование хакерских программ. Администрация никак не вмешивается в игровой процесс. Казалось бы, система должна была мгновенно превратиться в пепел (на месте спавна так и происходит: там царят кратеры).</p>
+                    
+                    <h4>Парадокс самоорганизации:</h4>
+                    <ul>
+                        <li><strong>Тайные строительные ложи:</strong> Осознавая, что выжить в одиночку нельзя, игроки создают закрытые группы (Spawn Masons). Используя жесткую внутреннюю дисциплину, они уходят на миллионы блоков спавна и строят монументальные города, которые годами живут в мире.</li>
+                        <li><strong>Инфраструктурные инициативы:</strong> Общественные группы добровольцев прокладывают гигантские дороги («Хайвеи») через измерения. Оберегают и восстанавливают их за свой счет для будущих поколений.</li>
+                        <li><strong>Дипломатия кризисов:</strong> Перед угрозой прихода армий хулиганов с YouTube, вечно враждующие кланы объединяются в ополчение.</li>
+                    </ul>
+                `,
+                conclusion: "Вывод из кейса: Абсолютная свобода не ведет к тотальному разрушению. Люди инстинктивно стремятся к созиданию и порядку, формируя строгие кодексы чести и братства даже в самых враждебных условиях."
             },
-            explorer: {
-                title: "🔭 Исследователь (Explorer)",
-                text: "Ты любишь изучать границы системы и придумывать что-то новое. В активе ты — генератор идей. Идеальная среда для тебя та, где можно переписывать правила и тестировать смелые форматы."
+            {
+                badge: "ЧАСТНЫЙ КЛУБ (ВАЙТЛИСТ)",
+                badgeColor: "rgba(255, 202, 40, 0.2)",
+                badgeTextColor: "#ffca28",
+                idTheme: "#ffca28",
+                title: "Hermitcraft: Экономика абсолютного доверия",
+                htmlContent: `
+                    <h4>Общество избранных</h4>
+                    <p>Полной противоположностью анархии является сервер <em>Hermitcraft</em>. Это закрытый проект, попасть куда можно только по приглашению опытных участников. Главный феномен этого мира — Экономика абсолютной чести (Honor System).</p>
+                    
+                    <h4>Как работает экономика без замков?</h4>
+                    <p>Разработчиками намеренно не используются жесткие программные плагины, защищающие сундуки от кражи. Игроки колонизируют гигантский Торговый Район. Любой игрок может зайти в чужой магазин, взять ресурсы и самостоятельно положить в ответ алмазы (валюту).</p>
+                    <p>За долгие годы существования масштабных краж здесь не происходило в принципе. Почему? Потому что в таком социальном пузыре публичная репутация — это самый ценный, долго накапливаемый капитал. Утрата доверия означает мгновенное и вечное изгнание участника с позором перед миллионами зрителей на YouTube.</p>
+                `,
+                conclusion: "Вывод из кейса: Жесткий фильтр при входе и страх потери ценной репутации в закрытом коллективе работают эффективнее, чем программы или надзиратели."
             },
-            socializer: {
-                title: "🤝 Социализатор (Socializer)",
-                text: "Таких как ты — большинство! Для тебя главное в любом проекте — это люди, общение и атмосфера. Ты тот клей, который делает коллектив дружным. Твоя миссия — горизонтальная модерация и решение конфликтов."
+            {
+                badge: "ПОЛИТИЧЕСКИЙ СИМУЛЯТОР",
+                badgeColor: "rgba(0, 255, 204, 0.2)",
+                badgeTextColor: "var(--neon-cyan)",
+                idTheme: "var(--neon-cyan)",
+                title: "CivMC: Институты и виртуальные суды",
+                htmlContent: `
+                    <h4>Рождение государств в Minecraft</h4>
+                    <p>Проект CivMC построен на одном критически важном программном допущении: игрокам дали предмет <strong>Жемчужина Тюрьмы (Prison Pearl)</strong>. Если убить другого персонажа с этой жемчужиной в инвентаре, он отправится в виртуальное заключение бесконечно долго. Техническая возможность лишить человека свободы заставила сообщество повзрослеть.</p>
+                    
+                    <h4>Сложные социальные машины:</h4>
+                    <ul>
+                        <li><strong>Сложная Юриспруденция:</strong> Чтобы не началась всеобщая война, были написаны "Конституции". Суд и вынесение приговора о "заточении в жемчужине" проходят в форме многочасовых дебатов присяжных на площадке Discord. У игроков есть роль "адвоката".</li>
+                        <li><strong>Финансовая независимость:</strong> Игроки государства Pavia основали Monument Bank. Учреждение автоматизировало переводы в алмазах, инвестирует в дороги и выдает кредиты под %. Доверие обеспечено публичными аудитами бухгалтерии.</li>
+                    </ul>
+                `,
+                conclusion: "Вывод из кейса: Угроза наказания, регулируемая самими пользователями снизу, создает условия для генерации сложнейших независимых институтов (судов, банков, парламентов)."
             },
-            killer: {
-                title: "⚔️ Разрушитель / Доминатор (Killer)",
-                text: "Тебе нравится доказывать свое превосходство и влиять на других (иногда нарушая рамки). Звучит грозно, но по теории Бартла, именно наличие таких людей заставляет созидающее большинство объединяться, писать законы и создавать институты правосудия!"
+            {
+                badge: "КОРПОРАТИВНАЯ ЭКОНОМИКА",
+                badgeColor: "rgba(79, 172, 254, 0.2)",
+                badgeTextColor: "#4facfe",
+                idTheme: "#4facfe",
+                title: "EVE Online: Демократия в открытом космосе",
+                htmlContent: `
+                    <h4>Капитализм и безопасность</h4>
+                    <p>Симулятор EVE Online славится суровой экономикой, где цена ошибки корабля стоит реальных тысяч долларов (через систему доната). В игре не запрещен корпоративный шпионаж и кидалово. Поэтому альянсы игроков из 10-20 тысяч человек создают мощные отделы кадров (HR) со своими расследованиями биографий и черными списками.</p>
+                    
+                    <h4>Легитимизация власти</h4>
+                    <p>Но главным феноменом EVE является <strong>Совет Звездного Управления (CSM).</strong> Это легитимный демократический орган. Ежегодно десятки тысяч игроков надежным криптографическим путем выбирают депутатов. Самое потрясающее, что компания-создатель официально оплачивает избранным геймерам перелет на саммит в Исландию, где они на равных с программистами решают будущее виртуальных законов!</p>
+                `,
+                conclusion: "Вывод из кейса: Виртуальный коллективный выбор и демократия давно вышли за границы кода — мнение комьюнити приобрело юридическое значение для корпорации в реальности."
+            },
+            {
+                badge: "RPG ПРАВОСУДИЕ",
+                badgeColor: "rgba(184, 41, 234, 0.2)",
+                badgeTextColor: "var(--neon-purple)",
+                idTheme: "var(--neon-purple)",
+                title: "NoPixel (GTA RP): Тотальный социальный контроль",
+                htmlContent: `
+                    <h4>Обязательность роли</h4>
+                    <p>Сервер NoPixel в Grand Theft Auto представляет собой систему жесткого контроля, но контроля со стороны самих участников. Каждый игрок при регистрации обязуется стать гражданином: получить счет, устроиться на работу таксистом, врачом или копом.</p>
+                    
+                    <h4>Процедурность и педантичность</h4>
+                    <p>Законодательство (Уголовный кодекс штата) нигде не прописано кодом программиста. Его исполняют живые люди: коп на сервере не имеет морального права "связать" или арестовать преступника без проведения расследования и зачитывания Миранды через микрофон.</p>
+                    <p>Штрафы огромные, а посадка в виртуальную колонию заставляет игрока днями убирать там мусор, нанося удар по прогрессу. И люди честно отыгрывают эти наказания, поскольку доступ на сервер элитарен.</p>
+                `,
+                conclusion: "Вывод из кейса: Человек готов педантично исполнять правила контроля, если он ощущает глубокое погружение и максимальную значимость своей социальной «роли»."
             }
+        ];
+
+        // ЛОГИКА СЛАЙДЕРА
+        const slider = document.getElementById('server-range');
+        const dynTextContainer = document.getElementById('server-dynamic-text');
+        
+        function updateSliderContent() {
+            const data = serverData[slider.value];
+            
+            // Плавное исчезновение
+            dynTextContainer.classList.add('fade-out');
+            
+            setTimeout(() => {
+                // Изменяем контент после исчезновения
+                dynTextContainer.innerHTML = `
+                    <div id="s-badge" style="background: ${data.badgeColor}; color: ${data.badgeTextColor}; border: 1px solid ${data.idTheme}">${data.badge}</div>
+                    <h2 id="s-title" class="neon-text" style="background: linear-gradient(90deg, #fff, ${data.idTheme}); -webkit-background-clip: text;">${data.title}</h2>
+                    <div id="s-content">${data.htmlContent}</div>
+                    <div class="server-conclusion" style="border-left-color: ${data.idTheme}; color: ${data.badgeTextColor}">${data.conclusion}</div>
+                `;
+                // Возвращаем видимость
+                dynTextContainer.classList.remove('fade-out');
+            }, 300); // 300ms для transition
+        }
+
+        slider.addEventListener('input', updateSliderContent);
+        updateSliderContent(); // Инициализация нуля
+
+        // ЛОГИКА АНАЛИЗАТОРА АРХЕТИПОВ
+        const rolesDesc = {
+            "achiever": { t: "👑 НАКОПИТЕЛЬ (ACHIEVER) - Архитектор системы", d: "Тебе нужен измеримый результат. Твоя идеальная среда школьного парламента — это четкая рейтинговая структура, где усилия равны наградам, и можно строить карьерную лестницу (банка, министерства). Ты станешь двигателем процессов, который следит, чтобы машина ехала, а не просто шумела." },
+            "socializer": { t: "🤝 СОЦИАЛИЗАТОР (SOCIALIZER) - Сердце модерации", d: "По Бартлу тебя большинство (80%). Твой фундамент — это человеческие связи. Твоя стихия в нашем проекте — внедрение Горизонтальной Модерации (опыт Discord) и разрешение конфликтов. Тебе не нужны жесткие уставы, ты предпочитаешь держать баланс доверием и атмосферой." },
+            "explorer": { t: "🔭 ИССЛЕДОВАТЕЛЬ (EXPLORER) - Тестер новых границ", d: "Школа для тебя — площадка экспериментов. Ты будешь отлично чувствовать себя, применяя принципы 'Соучастного нормотворчества', позволяя в начале года полностью перекраивать устав школы и тестировать новые квизы вживую, наблюдая за поведением экосистемы." },
+            "killer": { t: "⚔️ РАЗРУШИТЕЛЬ/ДОМИНАТОР (KILLER) - Катализатор законов", d: "Ты жесткий лидер, стремящийся к влиянию. Звучит страшно, но парадокс теории в том, что именно твоя жажда власти заставляет комьюнити создавать Конституции, суды и институты! Свою энергию ты лучше всего применишь в жестких фильтрах комиссии 'Вайтлиста'." }
         };
 
-        function checkQuiz() {
-            const answers = document.querySelectorAll('input[type="radio"]:checked');
-            if (answers.length < 3) {
-                alert("Пожалуйста, ответь на все 3 вопроса перед тем, как узнать результат!");
-                return;
+        function calculateQuiz() {
+            const radsMap = { q1: null, q2: null };
+            document.querySelectorAll('input[type="radio"]:checked').forEach(r => {
+                radsMap[r.name] = r.value;
+            });
+
+            if(!radsMap.q1 || !radsMap.q2) {
+                alert("Лаборатория системы требует ответить на все вопросы теста."); return;
             }
 
-            let scores = { achiever: 0, explorer: 0, socializer: 0, killer: 0 };
-            answers.forEach(ans => scores[ans.value]++);
-
-            // Находим ключ с максимальным значением
-            let maxScore = 0;
-            let finalType = '';
-            for (let type in scores) {
-                if (scores[type] > maxScore) {
-                    maxScore = scores[type];
-                    finalType = type;
-                }
-            }
-
-            document.getElementById('quizContainer').style.display = 'none';
-            document.getElementById('res-title').innerText = resultsData[finalType].title;
-            document.getElementById('res-text').innerText = resultsData[finalType].text;
+            // Для простоты, кто набрал последний, тот и есть, или миксуем:
+            const resultType = radsMap.q1 === radsMap.q2 ? radsMap.q1 : radsMap.q2; 
+            
+            document.getElementById('res-title').innerText = rolesDesc[resultType].t;
+            document.getElementById('res-desc').innerText = rolesDesc[resultType].d;
             document.getElementById('quiz-result').style.display = 'block';
         }
 
-        function resetQuiz() {
-            document.querySelectorAll('input[type="radio"]').forEach(rad => rad.checked = false);
-            document.getElementById('quizContainer').style.display = 'block';
-            document.getElementById('quiz-result').style.display = 'none';
+        // ЛОГИКА ACCORDION ДЛЯ ДОРОЖНОЙ КАРТЫ (LEVEL 3)
+        // Для 100% плавного CSS: мы меняем maxHeight у контента
+        function toggleAccordion(index) {
+            const headers = document.querySelectorAll('.acc-header');
+            const contents = document.querySelectorAll('.acc-content');
+            
+            const currentHeader = headers[index];
+            const currentContent = contents[index];
+            const isOpen = currentHeader.classList.contains('active');
+
+            // Закрыть все сначала (если нужен режим закрытия соседей)
+            headers.forEach((h, i) => {
+                h.classList.remove('active');
+                contents[i].style.maxHeight = '0px';
+            });
+
+            if (!isOpen) {
+                currentHeader.classList.add('active');
+                currentContent.style.maxHeight = currentContent.scrollHeight + 50 + "px"; // 50px buffer offset
+            }
         }
     </script>
 </body>
